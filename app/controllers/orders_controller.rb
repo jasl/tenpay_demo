@@ -64,7 +64,7 @@ class OrdersController < ApplicationController
                                :state => :paid
     end
 
-    redirect_to @order
+    redirect_to @order, notice: 'Order was successfully paid.'
   end
 
   def notify
