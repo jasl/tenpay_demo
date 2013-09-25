@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  subject: MyString
+  order: MyString
+  fee: 1
+  state: MyString
+
+two:
+  subject: MyString
+  order: MyString
+  fee: 1
+  state: MyString
