@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, except: [:index, :new]
+  before_action :set_order, except: [:index, :new, :create]
 
   # GET /orders
   # GET /orders.json
@@ -62,10 +62,11 @@ class OrdersController < ApplicationController
   end
 
   def pay
-    generate_tenpay_url :subject => @order.subject,
-                        :body => @order.body,
-                        :total_fee => @order.fee,
-                        :out_trade_no => @order.id
+    url = generate_tenpay_url :subject => @order.subject,
+                              :body => @order.body,
+                              :total_fee => @order.fee,
+                              :out_trade_no => @order.id
+    redirect_to url
   end
 
   def notify
