@@ -17,10 +17,6 @@ class OrdersController < ApplicationController
     @order = Order.new
   end
 
-  # GET /orders/1/edit
-  def edit
-  end
-
   # POST /orders
   # POST /orders.json
   def create
@@ -32,20 +28,6 @@ class OrdersController < ApplicationController
         format.json { render action: 'show', status: :created, location: @order }
       else
         format.html { render action: 'new' }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /orders/1
-  # PATCH/PUT /orders/1.json
-  def update
-    respond_to do |format|
-      if @order.update(order_params)
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
@@ -65,19 +47,29 @@ class OrdersController < ApplicationController
     url = generate_tenpay_url :subject => @order.subject,
                               :body => @order.body,
                               :total_fee => @order.fee,
-                              :out_trade_no => @order.id
+                              :out_trade_no => @order.trade_no
     redirect_to url
   end
 
   def notify
+    logger.info '========'
     logger.info params
+    logger.info '========'
+
     @order.update_attributes :transaction_id => params[:transaction_id],
                              :trade_state => params[:trade_state],
-                             :pay_info => params[:pay_info]
+                             :pay_info => params[:pay_info],
+                             :paid_at => params[:time_end],
+                             :state => :confirmed
+    redirect_to @order
   end
 
   def callback
+    logger.info '========'
     logger.info params
+    logger.info '========'
+
+    @order.update_attributes :state => :confirmed
     render text: 'success'
   end
 
@@ -90,7 +82,7 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:subject, :body, :fee, :state)
+    params.require(:order).permit(:subject, :body, :fee)
   end
 
   def generate_tenpay_url(options)

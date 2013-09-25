@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jasl/tenpay.git
-  revision: ae3840806cc6b45da15fbe9c996a060602e50965
+  revision: 2f21781d41a9f826956e65aca3e507497fdf71ec
   specs:
     tenpay (0.0.1)
 

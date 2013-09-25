@@ -16,10 +16,29 @@
 </p>
 
 <p>
+  <strong>Trade No.:</strong>
+  <%= @order.trade_no %>
+</p>
+
+<p>
+  <strong>Tenpay transaction id:</strong>
+  <%= @order.transaction_id %>
+</p>
+
+<p>
+  <strong>Tenpay trade state:</strong>
+  <%= @order.trade_state %>
+</p>
+
+<p>
+  <strong>Tenpay paid at:</strong>
+  <%= @order.paid_at %>
+</p>
+
+<p>
   <strong>State:</strong>
   <%= @order.state %>
 </p>
 
 <%= link_to 'Pay', pay_order_path(@order) %> |
-<%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>
