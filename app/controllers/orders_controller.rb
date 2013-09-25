@@ -53,10 +53,10 @@ class OrdersController < ApplicationController
 
   def callback
     logger.info '========'
-    logger.info params
+    logger.info params.except(*request.path_parameters.keys)
     logger.info '========'
 
-    if Tenpay::Sign.verify? params
+    if Tenpay::Sign.verify? params.except(*request.path_parameters.keys)
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
@@ -69,10 +69,10 @@ class OrdersController < ApplicationController
 
   def notify
     logger.info '========'
-    logger.info params
+    logger.info params.except(*request.path_parameters.keys)
     logger.info '========'
 
-    if Tenpay::Notify.verify? params
+    if Tenpay::Notify.verify? params.except(*request.path_parameters.keys)
       @order.update_attributes :state => :confirmed
       render text: 'success'
     else
