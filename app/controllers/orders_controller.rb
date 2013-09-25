@@ -51,26 +51,33 @@ class OrdersController < ApplicationController
     redirect_to url
   end
 
-  def notify
-    logger.info '========'
-    logger.info params
-    logger.info '========'
-
-    @order.update_attributes :transaction_id => params[:transaction_id],
-                             :trade_state => params[:trade_state],
-                             :pay_info => params[:pay_info],
-                             :paid_at => params[:time_end],
-                             :state => :confirmed
-    redirect_to @order
-  end
-
   def callback
     logger.info '========'
     logger.info params
     logger.info '========'
 
-    @order.update_attributes :state => :confirmed
-    render text: 'success'
+    if Tenpay::Sign.verify? params
+      @order.update_attributes :transaction_id => params[:transaction_id],
+                               :trade_state => params[:trade_state],
+                               :pay_info => params[:pay_info],
+                               :paid_at => params[:time_end],
+                               :state => :paid
+    end
+
+    redirect_to @order
+  end
+
+  def notify
+    logger.info '========'
+    logger.info params
+    logger.info '========'
+
+    if Tenpay::Notify.verify? params
+      @order.update_attributes :state => :confirmed
+      render text: 'success'
+    else
+      render text: 'fail'
+    end
   end
 
   private
@@ -87,8 +94,8 @@ class OrdersController < ApplicationController
 
   def generate_tenpay_url(options)
     options = {
-        :return_url => notify_order_url(@order),
-        :notify_url => callback_order_url(@order),
+        :return_url => callback_order_url(@order),
+        :notify_url => notify_order_url(@order),
         :spbill_create_ip => request.ip,
     }.merge(options)
     Tenpay::Service.create_interactive_mode_url(options)
