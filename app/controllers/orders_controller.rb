@@ -1,24 +1,17 @@
 class OrdersController < ApplicationController
   before_action :set_order, except: [:index, :new, :create]
 
-  # GET /orders
-  # GET /orders.json
   def index
     @orders = Order.all
   end
 
-  # GET /orders/1
-  # GET /orders/1.json
   def show
   end
 
-  # GET /orders/new
   def new
     @order = Order.new
   end
 
-  # POST /orders
-  # POST /orders.json
   def create
     @order = Order.new(order_params)
 
@@ -33,8 +26,6 @@ class OrdersController < ApplicationController
     end
   end
 
-  # DELETE /orders/1
-  # DELETE /orders/1.json
   def destroy
     @order.destroy
     respond_to do |format|
@@ -52,11 +43,7 @@ class OrdersController < ApplicationController
   end
 
   def callback
-    logger.info '========'
-    logger.info params.except(*request.path_parameters.keys)
-    logger.info '========'
-
-    # notify may faster than callback
+    # notify may reach earlier than callback
     if Tenpay::Sign.verify? params.except(*request.path_parameters.keys) and @order.state == :pending
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
@@ -69,10 +56,6 @@ class OrdersController < ApplicationController
   end
 
   def notify
-    logger.info '========'
-    logger.info params.except(*request.path_parameters.keys)
-    logger.info '========'
-
     if Tenpay::Notify.verify? params.except(*request.path_parameters.keys)
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
@@ -87,12 +70,10 @@ class OrdersController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_order
     @order = Order.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
     params.require(:order).permit(:subject, :body, :fee)
   end
