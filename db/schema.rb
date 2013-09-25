@@ -15,9 +15,11 @@ ActiveRecord::Schema.define(version: 20130925035831) do
 
   create_table "orders", force: true do |t|
     t.string   "subject"
-    t.string   "order"
+    t.string   "body"
     t.integer  "fee"
     t.string   "transaction_id"
+    t.string   "trade_state"
+    t.string   "pay_info"
     t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"

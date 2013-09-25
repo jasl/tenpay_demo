@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order
+  before_action :set_order, except: [:index, :new]
 
   # GET /orders
   # GET /orders.json
@@ -89,13 +89,13 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:subject, :order, :fee, :state)
+    params.require(:order).permit(:subject, :body, :fee, :state)
   end
 
   def generate_tenpay_url(options)
     options = {
-        :return_url => tenpay_callback_url,
-        :notify_url => tenpay_notify_url,
+        :return_url => notify_order_url(@order),
+        :notify_url => callback_order_url(@order),
         :spbill_create_ip => request.ip,
     }.merge(options)
     Tenpay::Service.create_interactive_mode_url(options)

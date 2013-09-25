@@ -6,8 +6,8 @@
 </p>
 
 <p>
-  <strong>Order:</strong>
-  <%= @order.order %>
+  <strong>Body:</strong>
+  <%= @order.body %>
 </p>
 
 <p>
@@ -20,5 +20,6 @@
   <%= @order.state %>
 </p>
 
+<%= link_to 'Pay', pay_order_path(@order) %> |
 <%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>

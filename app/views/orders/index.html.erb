@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Subject</th>
-      <th>Order</th>
+      <th>Body</th>
       <th>Fee</th>
       <th>State</th>
       <th></th>
@@ -17,7 +17,7 @@
     <% @orders.each do |order| %>
       <tr>
         <td><%= order.subject %></td>
-        <td><%= order.order %></td>
+        <td><%= order.body %></td>
         <td><%= order.fee %></td>
         <td><%= order.state %></td>
         <td><%= link_to 'Show', order %></td>

@@ -3,6 +3,7 @@ TenpayDemo::Application.routes.draw do
     member do
       get 'notify'
       get 'callback'
+      get 'pay'
     end
   end
 

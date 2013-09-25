@@ -49,3 +49,5 @@ gem 'thin'
 gem 'priceable', github: 'saberma/priceable'
 
 gem 'tenpay', github: 'jasl/tenpay'
+
+gem 'quiet_assets'
