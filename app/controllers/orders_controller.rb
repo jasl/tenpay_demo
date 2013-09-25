@@ -57,7 +57,7 @@ class OrdersController < ApplicationController
     logger.info '========'
 
     # notify may faster than callback
-    if Tenpay::Sign.verify? params.except(*request.path_parameters.keys) && @order.state == :pending
+    if Tenpay::Sign.verify? params.except(*request.path_parameters.keys) and @order.state == :pending
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
