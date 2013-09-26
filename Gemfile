@@ -46,6 +46,6 @@ end
 
 gem 'thin'
 
-gem 'tenpay', github: 'jasl/tenpay'
+gem 'jasl_tenpay'
 
 gem 'quiet_assets'
