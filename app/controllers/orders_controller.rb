@@ -44,7 +44,7 @@ class OrdersController < ApplicationController
 
   def callback
     # notify may reach earlier than callback
-    if Tenpay::Sign.verify? params.except(*request.path_parameters.keys) and @order.state == :pending
+    if JaslTenpay::Sign.verify? params.except(*request.path_parameters.keys) and @order.state == :pending
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
@@ -56,7 +56,7 @@ class OrdersController < ApplicationController
   end
 
   def notify
-    if Tenpay::Notify.verify? params.except(*request.path_parameters.keys)
+    if JaslTenpay::Notify.verify? params.except(*request.path_parameters.keys)
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
@@ -84,6 +84,6 @@ class OrdersController < ApplicationController
         :notify_url => notify_order_url(@order),
         :spbill_create_ip => request.ip,
     }.merge(options)
-    Tenpay::Service.create_interactive_mode_url(options)
+    JaslTenpay::Service.create_interactive_mode_url(options)
   end
 end

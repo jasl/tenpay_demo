@@ -41,7 +41,7 @@ GEM
     execjs (2.0.1)
     hike (1.2.3)
     i18n (0.6.5)
-    jasl_tenpay (1.0.0)
+    jasl_tenpay (1.0.1)
     jbuilder (1.5.1)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
