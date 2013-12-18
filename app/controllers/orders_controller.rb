@@ -44,7 +44,8 @@ class OrdersController < ApplicationController
 
   def callback
     # notify may reach earlier than callback
-    if JaslTenpay::Sign.verify? params.except(*request.path_parameters.keys) and @order.state == :pending
+    if JaslTenpay::Sign.verify?(params.except(*request.path_parameters.keys), verify_trade_state: true) &&
+        @order.state == :pending
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
@@ -56,7 +57,7 @@ class OrdersController < ApplicationController
   end
 
   def notify
-    if JaslTenpay::Notify.verify? params.except(*request.path_parameters.keys)
+    if JaslTenpay::Notify.verify? params.except(*request.path_parameters.keys), verify_trade_state: true
       @order.update_attributes :transaction_id => params[:transaction_id],
                                :trade_state => params[:trade_state],
                                :pay_info => params[:pay_info],
